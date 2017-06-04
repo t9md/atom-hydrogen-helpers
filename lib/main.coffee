@@ -27,6 +27,12 @@ hydrogenAppendCell = (editor) ->
       editor.setTextInBufferRange([point, point], " #{commentStartString}%%")
 
 hydrogenRestartKernelAndRunAll = (editorElement) ->
+  unless hydrogenStore?
+    # means hydrogen is not yet activated. need activation by run-all
+    # We don't need restart since this is first-run
+    atom.commands.dispatch(editorElement, 'hydrogen:run-all')
+    return
+
   kernel = hydrogenStore.kernel
   return unless kernel?
 
