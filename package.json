@@ -1,0 +1,27 @@
+{
+  "name": "hydrogen-helpers",
+  "main": "./lib/main",
+  "version": "0.0.0",
+  "description": "hydrogen helpers",
+  "keywords": [
+    "hydrogen"
+  ],
+  "repository": "https://github.com/t9md/atom-hydrogen-helpers",
+  "license": "MIT",
+  "activationCommands": {
+    "atom-text-editor": [
+      "hydrogen-helper:toggle-line-cells",
+      "hydrogen-helper:restart-kernel-and-run-all"
+    ]
+  },
+  "engines": {
+    "atom": ">=0.174.0 <2.0.0"
+  },
+  "consumedServices": {
+    "hydrogen.provider": {
+      "versions": {
+        "^1.0.0": "consumeHydrogen"
+      }
+    }
+  }
+}
