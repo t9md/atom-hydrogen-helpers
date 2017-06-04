@@ -10,9 +10,10 @@ Some hydrogen helper commands package.
 
 # commands
 
-Currently this package provide following two commands
+Currently this package provide following commands
 
 - `hydrogen-helper:toggle-line-cells`: add or remove `cell` to end of each selected lines.
+- `hydrogen-helper:clear-all-line-cells`: clear all line-cells placed on each end of lines.
 - `hydrogen-helper:restart-kernel-and-run-all`
 
 # keymap
@@ -25,4 +26,5 @@ no keymap by default, my keymap is here.
 'atom-text-editor:not([mini])':
   'cmd-m': 'hydrogen-helper:toggle-line-cells'
   'cmd-h': 'hydrogen-helper:restart-kernel-and-run-all'
+  'shift-cmd-m': 'hydrogen-helper:clear-all-line-cells'
 ```

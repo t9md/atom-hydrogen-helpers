@@ -11,7 +11,8 @@
   "activationCommands": {
     "atom-text-editor": [
       "hydrogen-helper:toggle-line-cells",
-      "hydrogen-helper:restart-kernel-and-run-all"
+      "hydrogen-helper:restart-kernel-and-run-all",
+      "hydrogen-helper:clear-all-line-cells"
     ]
   },
   "engines": {

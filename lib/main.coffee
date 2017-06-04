@@ -1,4 +1,4 @@
-{CompositeDisposable, Disposable} = require 'atom'
+{CompositeDisposable} = require 'atom'
 
 hydrogenMain = null
 hydrogenStore = null
@@ -7,24 +7,42 @@ requireFrom = (pack, path) ->
   packPath = atom.packages.resolvePackagePath(pack)
   require "#{packPath}/lib/#{path}"
 
-hydrogenAppendCell = (editor) ->
+removeLineCellForBufferRow = (editor, row, commentStartString) ->
+  cellRemoved = false
+  regex = ///\s*#{commentStartString}\s*%%\s*$///
+  scanRange = editor.bufferRangeForBufferRow(row)
+  editor.scanInBufferRange regex, scanRange, ({range, replace}) ->
+    unless range.isEmpty()
+      replace('')
+      cellRemoved = true
+
+  return cellRemoved
+
+getCommentStartStrings = (editor) ->
   scope = editor.getLastCursor().getScopeDescriptor()
-  {commentStartString} = editor.getCommentStrings(scope)
+  editor.getCommentStrings(scope).commentStartString
+
+hydrogenAppendCell = (editor) ->
+  commentStartString = getCommentStartStrings(editor)
+
   [startRow, endRow] = editor.getLastSelection().getBufferRowRange()
-
-  pattern = ///\s*#{commentStartString}\s*%%\s*$///
-
   for row in [startRow..endRow]
-    scanRange = editor.bufferRangeForBufferRow(row)
-    replaced = false
-    editor.scanInBufferRange pattern, scanRange, ({range, replace}) ->
-      unless range.isEmpty()
-        replace('')
-        replaced = true
+    if removeLineCellForBufferRow(editor, row, commentStartString)
+      continue
 
-    unless replaced
-      point = [row, Infinity]
-      editor.setTextInBufferRange([point, point], " #{commentStartString}%%")
+    point = [row, Infinity]
+    editor.setTextInBufferRange([point, point], " #{commentStartString}%%")
+
+clearAllLineCells = (editor) ->
+  selection = editor.getLastSelection()
+  if selection.getBufferRange().isEmpty()
+    rowRange = [0, editor.getLastBufferRow()]
+  else
+    rowRange = selection.getBufferRowRange()
+
+  [startRow, endRow] = rowRange
+  for row in [startRow..endRow]
+    removeLineCellForBufferRow(editor, row, getCommentStartStrings(editor))
 
 hydrogenRestartKernelAndRunAll = (editorElement) ->
   unless hydrogenStore?
@@ -46,6 +64,8 @@ module.exports =
     @subscriptions.add atom.commands.add "atom-text-editor:not([mini])",
       "hydrogen-helper:toggle-line-cells": ->
         hydrogenAppendCell(@getModel())
+      "hydrogen-helper:clear-all-line-cells": ->
+        clearAllLineCells(@getModel())
       "hydrogen-helper:restart-kernel-and-run-all": ->
         hydrogenRestartKernelAndRunAll(this)
 
