@@ -1,0 +1,23 @@
+extends:
+  - eslint:recommended
+
+env:
+  node: true
+  es6: true
+
+globals:
+  atom: false
+
+settings:
+  import/core-modules: [ atom ]
+
+rules:
+  valid-jsdoc: 2
+  no-param-reassign: 0
+  comma-dangle: 0
+  no-console: 0
+  one-var: 0
+  no-else-return: 1
+  no-unused-expressions: 0
+  indent: ["error", 2]
+  eol-last: 0
