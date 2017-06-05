@@ -24,5 +24,6 @@
         "^1.0.0": "consumeHydrogen"
       }
     }
-  }
+  },
+  "devDependencies": {}
 }
