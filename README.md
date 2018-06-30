@@ -1,5 +1,7 @@
 # hydrogen-helpers
 
+:warning: This package is no longer maintained and unpublished at 2018.6.1. :warning:   
+
 Some hydrogen helper commands package.
 
 **You need to install [Hydrogen](https://atom.io/packages/hydrogen), core functionalities are provided by Hydrogen**  
